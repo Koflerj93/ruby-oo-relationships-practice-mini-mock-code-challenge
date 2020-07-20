@@ -19,7 +19,7 @@ class Book
     end
 
     def authors
-        self.book_authors.select { |author| book_author| book_author.author}.uniq
+        self.book_authors.select { |author| book_author book_author.author}.uniq
     end
 
 
