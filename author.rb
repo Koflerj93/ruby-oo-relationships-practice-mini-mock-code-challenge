@@ -1,7 +1,7 @@
-require 'pry'
 class Author 
 
-    attr_accessor :name 
+    attr_reader :name 
+    
     @@all = []
 
     def initialize(name)
@@ -14,31 +14,29 @@ class Author
     end 
 
     def books 
-        Book.all.select do |book|
-            book.author = self 
-        end 
+        Book.all.filter{|book| book.author == self} 
     end 
 
     def write_book(title, word_count)
-        book = Book.new(title, word_count)
-        book.author = self 
+        Book.new(self, title, word_count)
     end 
 
     def total_words
-        word_counts = books.sum do |book|
-            book.word_count
-        end
-        word_counts
+        self.books.rreduce(0) do |all_the_words, book| 
+            all_the_words + book.word_count
+        end 
     end
 
     def self.most_words
-        most_words = 0
-        books.each do |book| 
-            if book.word_count > most_words
-                most_words = book.word_count
-            end 
-        end
-        most_words 
+       
+        self.all.max_by do |author|   # this is still really confusing to me 
+            author.total_words
+        end 
+
     end 
+
+
+    
+
 end 
 
